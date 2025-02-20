@@ -77,7 +77,11 @@ is represented by an `Operation` subclass.
 `Operation` has three methods to override: `Run`, `Check` and optionally `Pre`. `Pre` takes a model and returns true
 if and only if this operation can execute on a model in that state - in other words it checks if the precondition for the operation is satisfied. Note that
 `Machine.Next` can also return a reduced set of operations based on the model, which is more efficient, but the preconditions are checked regardless for each 
-operation `Next` generates. 
+operation `Next` generates. One reason to use `Pre` is to help the shrinker validate shrunk operation sequences: you may not need `Pre` during normal test runs
+and let `Next` generate only valid next operations, but the default shrinker doesn't have a way to maintain that validity when it shortens the operations list,
+and so it relies on `Pre` to filter invalid sequences. As an example, if you're testing a system of database writes, `Next` may generate a new row in the table,
+then a subsequent `Next` may reference that row; this is valid and doesn't require pre-conditions as long as no shrinking occurs, but to allow correct shrinking
+in this case a pre-condition should be added that checks for references between rows, because the shrinker may remove the operation that creates the row.
 
 `Run` takes a model and returns the new model which is the result of applying this operation to the model. `Check` then takes the new model (as returned from `Run`),
 applies the operation to the actual system under test, and checks whether the result of the SUT matches with the model. The return type of `Check` is Property so
