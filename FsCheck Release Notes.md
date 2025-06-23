@@ -1,3 +1,13 @@
+### 3.3.0 - 3 June 2025
+
+* Added FsCheck.Xunit.v3. (by JohSand)
+
+### 3.2.0 - 10 April 2025
+
+* Support C# struct record generation. (by Brian Rourke Boll)
+
+* Xunit `Property` respects `IAsyncLifetime`. (by Arialdo Martini)
+
 ### 3.1.0 - 30 January 2025
 
 * Support Async<'Testable> & Task<'Testable>. Slight behavior change: an explicit upcast to non-generic `Task` (`:> Task`) is now needed for tests involving `Task<'T>` where `'T` is not itself a testable type. (by Brian Rourke Boll)
